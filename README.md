@@ -65,11 +65,11 @@ mkdir -p database && touch database/database.sqlite
 # 5) Frontend starten
 ./vendor/bin/sail npm install
 ./vendor/bin/sail npm run dev
-
+```
 
 
 ---
 
-## Beoordeling & eind
+## Beoordeling & Eind
 Wanneer je klaar bent met de opdracht zien we graag een PR met hierin een uitleg van je oplossing en wat je allemaal hebt overwogen. We zullen vervolgens samen zitten voor een demo om dit te bespreken. 
 
