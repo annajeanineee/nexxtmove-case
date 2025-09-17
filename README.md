@@ -1,61 +1,67 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Nexxtmove – Full-Stack Case (Laravel + Vue)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Pitch: Woningoverzicht bouwen in Nexxtmove
 
-## About Laravel
+### Probleem
+Makelaars willen snel een overzicht van hun woningen kunnen tonen, filteren en detailinformatie inzien.  
+Op dit moment ontbreekt een eenvoudige en flexibele interface hiervoor.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Appetite
+De opdracht mag maximaal **5 uur** duren.  
+Het hoeft dus geen complete, pixel-perfecte, productie-ready oplossing te zijn, maar we willen zien hoe je **prioriteiten stelt** en een **werkend minimum** oplevert.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Solution
+De makelaar moet een eenvoudig overzicht van woningen kunnen openen. In dit overzicht kan hij/zij de lijst woningen doorzoeken en filteren.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Belangrijkste wensen vanuit de makelaar:
+- Toon een lijst van beschikbare woningen met basisinformatie (**titel, prijs, plaats, status**).  
+- De makelaar wil snel kunnen filteren op **plaats**, **status** en **prijsklasse**, zodat hij alleen relevante woningen ziet.  
+- Het moet mogelijk zijn om meer informatie over een woning te bekijken, bijvoorbeeld door te klikken op een woning en dan de **details** te tonen.  
 
-## Learning Laravel
+**Optioneel (als er tijd is):**
+- Sorteren van woningen op prijs of plaats.  
+- Paginatie bij een grotere lijst.  
+- Een visuele weergave, zoals een grafiek met aantal woningen per stad.  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Het eindresultaat hoeft niet groot of perfect te zijn, maar moet laten zien hoe jij een eerste **werkend minimum** maakt waarmee een makelaar daadwerkelijk woningen kan bekijken en filteren.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Rabbit Holes
+- UI hoeft niet perfect gestyled te zijn → **functionaliteit boven vorm**.  
+- Ga niet te veel tijd verliezen aan advanced frontend-state oplossingen (Vuex/Pinia is nice, maar niet verplicht).  
+- Security/authenticatie is **buiten scope**.  
+- Alleen woningen ophalen, **geen admin omgeving of CMS-functionaliteit**.  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### No-Gos
+- Geen focus op pixel-perfect design.  
+- Geen extra frameworks naast Laravel en Vue.  
 
-## Laravel Sponsors
+### Wat we willen zien
+- Hoe je de **aanpak kiest** en je eigen scope afbakent.  
+- Hoe je een **minimum werkend resultaat** oplevert.  
+- Hoe je de **stack toepast** (Laravel API + Vue-frontend).  
+- Hoe je **samenwerkt en communiceert** (stel je vragen, leg je keuzes uit).  
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Setup & Starten
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+> Vereisten: Docker Desktop actief.
 
-## Contributing
+```bash
+# 1) .env aanmaken en key genereren
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 2) SQLite DB klaarzetten
+mkdir -p database && touch database/database.sqlite
+# Zorg in .env dat DB_CONNECTION=sqlite staat
 
-## Code of Conduct
+# 3) Containers starten
+./vendor/bin/sail up -d
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 4) Migraties/seeders (voeg die zelf toe)
+./vendor/bin/sail artisan migrate --seed
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 5) Frontend starten
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
