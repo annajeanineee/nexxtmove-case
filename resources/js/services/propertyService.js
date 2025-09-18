@@ -7,7 +7,8 @@ const error = ref(null);
 
 const filters = ref({
     city: '',
-    priceRange: ''
+    priceRange: '',
+    status: ''
 });
 
 const fetchProperties = async () => {
@@ -43,6 +44,11 @@ const getFilteredProperties = computed(() => {
             const [min, max] = filters.value.priceRange.split('-').map(Number);
             if (min && property.price < min) return false;
             if (max && property.price > max) return false;
+        }
+
+        // Filter by status
+        if (filters.value.status && property.status !== filters.value.status) {
+            return false;
         }
 
         return true;

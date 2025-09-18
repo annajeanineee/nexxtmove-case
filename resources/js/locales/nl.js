@@ -11,6 +11,7 @@ export default {
     filters_all: 'Alles',
     filters_city: 'Plaats',
     filters_price: 'Prijsklasse',
+    filters_status: 'Status',
     filters_apply: 'Filters toepassen',
     details_view: 'Details bekijken',
     details_back: 'Terug naar overzicht',

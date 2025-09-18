@@ -11,6 +11,7 @@ export default {
     filters_all: 'All',
     filters_city: 'City',
     filters_price: 'Price range',
+    filters_status: 'Status',
     filters_apply: 'Apply filters',
     details_view: 'View details',
     details_back: 'Back to overview',

@@ -27,6 +27,17 @@
                         </select>
                     </div>
 
+                    <div class="filter-group">
+                        <label for="status">{{ $t('filters_status') }}</label>
+                        <select id="status" v-model="filters.status">
+                            <option value="">{{ $t('filters_all') }}</option>
+                            <option value="available">{{ $t('status_available') }}</option>
+                            <option value="under_offer">{{ $t('status_under_offer') }}</option>
+                            <option value="sold">{{ $t('status_sold') }}</option>
+                            <option value="rented">{{ $t('status_rented') }}</option>
+                        </select>
+                    </div>
+
                     <button class="btn" @click="applyFilters">
                         {{ $t('filters_apply') }}
                     </button>
