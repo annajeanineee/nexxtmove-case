@@ -1,10 +1,9 @@
 <?php
 
+use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/properties', function () {
-    return response()->json([
-        'data' => [],
-        'meta' => ['total' => 0],
-    ]);
-});
+Route::get('/properties', [PropertyController::class, 'index']);
+Route::get('/properties/{property}', [PropertyController::class, 'show']);
+
+
