@@ -144,7 +144,7 @@
         selectedPropertyId.value = propertyId;
         isDetailVisible.value = true;
     };
-    
+
     const closePropertyDetail = () => {
         isDetailVisible.value = false;
     };
