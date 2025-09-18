@@ -15,10 +15,15 @@ export default {
     filters_apply: 'Filters toepassen',
     details_view: 'Details bekijken',
     details_back: 'Terug naar overzicht',
+    details_loading: 'Details worden geladen...',
+    details_error: 'Fout bij het laden van de details. Probeer het later opnieuw.',
+    details_description: 'Omschrijving',
     statistics_title: 'Statistieken',
     statistics_comingSoon: 'Binnenkort beschikbaar',
     status_sold: 'Verkocht',
     status_under_offer: 'Onder bieding',
     status_available: 'Beschikbaar',
-    status_rented: 'Verhuurd'
+    status_rented: 'Verhuurd',
+    error_failed_properties: 'Woningen konden niet opgehaald worden. Probeer het later opnieuw.',
+    error_failed_filters: 'Filters konden niet worden toegepast. Probeer het later opnieuw.'
 }

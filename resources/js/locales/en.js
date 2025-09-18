@@ -15,10 +15,15 @@ export default {
     filters_apply: 'Apply filters',
     details_view: 'View details',
     details_back: 'Back to overview',
+    details_loading: 'Loading details...',
+    details_error: 'Failed to load details. Please try again later.',
+    details_description: 'Description',
     statistics_title: 'Statistics',
     statistics_comingSoon: 'Coming soon',
     status_sold: 'Sold',
     status_under_offer: 'Under offer',
     status_available: 'Available',
-    status_rented: 'Rented'
+    status_rented: 'Rented',
+    error_failed_properties: 'Failed to load properties. Please try again later.',
+    error_failed_filters: 'Failed to apply filters. Please try again later.'
 }

@@ -6,6 +6,8 @@
                 <h1>{{ $t('properties_title') }}</h1>
             </header>
 
+            <PropertyDetail :property-id="selectedPropertyId" :is-visible="isDetailVisible" @close="closePropertyDetail"/>
+
              <section>
                 <div class="card filters">
                     <div class="filter-group">
@@ -38,7 +40,7 @@
                         </select>
                     </div>
 
-                    <button class="btn" @click="applyFilters">
+                    <button class="btn" @click="applyFilters(1)">
                         {{ $t('filters_apply') }}
                     </button>
                 </div>
@@ -59,16 +61,47 @@
                             <p class="city">{{ property.city }}</p>
                             <p class="price">€{{ property.price.toLocaleString() }}</p>
                             <p class="details">
-                                <span>{{ property.bedrooms }} {{ $t('properties_beds') }}</span> •
+                                <span>{{ property.bedrooms }} {{ $t('properties_beds') }}</span> |
                                 <span>{{ property.bathrooms }} {{ $t('properties_baths') }}</span>
-                                <span v-if="property.balcony"> • {{ $t('properties_balcony') }}</span>
-                                <span v-if="property.garden"> • {{ $t('properties_garden') }}</span>
+                                <span v-if="property.balcony"> | {{ $t('properties_balcony') }}</span>
+                                <span v-if="property.garden"> | {{ $t('properties_garden') }}</span>
                             </p>
                             <p :class="['status', property.status]">{{ $t(`status_${property.status}`) }}</p>
-                            <button class="btn view-details">
+                            <button class="btn view-details" @click="openPropertyDetail(property.id)">
                                 {{ $t('details_view') }}
                             </button>
                         </div>
+                    </div>
+
+                    <div v-if="meta.last_page > 1" class="pagination">
+                        <button
+                            class="pagination-arrow"
+                            :disabled="meta.current_page === 1"
+                            @click="goToPage(meta.current_page - 1)"
+                            aria-label="Previous page"
+                        >
+                            &larr;
+                        </button>
+
+                        <div class="pagination-numbers">
+                            <button
+                                v-for="page in pageNumbers"
+                                :key="page"
+                                :class="['pagination-number', { active: meta.current_page === page }]"
+                                @click="goToPage(page)"
+                            >
+                                {{ page }}
+                            </button>
+                        </div>
+
+                        <button
+                            class="pagination-arrow"
+                            :disabled="meta.current_page === meta.last_page"
+                            @click="goToPage(meta.current_page + 1)"
+                            aria-label="Next page"
+                        >
+                            &rarr;
+                        </button>
                     </div>
                 </div>
             </section>
@@ -77,10 +110,12 @@
 </template>
 
 <script setup>
-    import { onMounted } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { useI18n } from 'vue-i18n';
     import SideMenu from '../components/SideMenu.vue';
+    import PropertyDetail from '../components/PropertyDetail.vue';
     import propertyService from '../services/propertyService';
+    import propertyDetailService from '../services/propertyDetailService';
 
     const { t } = useI18n();
     const {
@@ -89,11 +124,30 @@
         error,
         filters,
         meta,
+        currentPage,
         fetchProperties,
         getCities: cities,
         getFilteredProperties: filteredProperties,
-        applyFilters
+        applyFilters,
+        goToPage,
+        getPageNumbers: pageNumbers
     } = propertyService;
+
+    const {
+        fetchPropertyDetails
+    } = propertyDetailService;
+
+    const selectedPropertyId = ref(null);
+    const isDetailVisible = ref(false);
+
+    const openPropertyDetail = (propertyId) => {
+        selectedPropertyId.value = propertyId;
+        isDetailVisible.value = true;
+    };
+    
+    const closePropertyDetail = () => {
+        isDetailVisible.value = false;
+    };
 
     onMounted(fetchProperties);
 </script>
@@ -191,6 +245,7 @@
         margin-bottom: 8px;
         font-size: 18px;
         color: #2c3e50;
+        height: 3lh;
     }
 
     .city {
@@ -239,5 +294,69 @@
 
     .dataCount {
         color: #6c757d;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        gap: 10px;
+    }
+
+    .pagination-numbers {
+        display: flex;
+        gap: 5px;
+    }
+
+    .pagination-number {
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border: 1px solid #e1e4e8;
+        border-radius: 4px;
+        color: #6c757d;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .pagination-number:hover {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+
+    .pagination-number.active {
+        background-color: #497eb8;
+        border-color: #497eb8;
+        color: white;
+    }
+
+    .pagination-arrow {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border: 1px solid #e1e4e8;
+        border-radius: 4px;
+        color: #6c757d;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .pagination-arrow:hover:not(:disabled) {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+
+    .pagination-arrow:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 </style>

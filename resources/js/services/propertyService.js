@@ -4,6 +4,7 @@ const properties = ref([]);
 const meta = ref([]);
 const loading = ref(true);
 const error = ref(null);
+const currentPage = ref(1);
 
 const filters = ref({
     city: '',
@@ -11,16 +12,21 @@ const filters = ref({
     status: ''
 });
 
-const fetchProperties = async () => {
+const fetchProperties = async (page = 1) => {
     try {
         loading.value = true;
-        const response = await fetch('/api/properties');
+        currentPage.value = page;
+
+        const params = new URLSearchParams();
+        params.append('page', page);
+
+        const response = await fetch(`/api/properties?${params.toString()}`);
         const data = await response.json();
         properties.value = data.data;
-        meta.value = data.meta
+        meta.value = data.meta;
         loading.value = false;
     } catch (err) {
-        error.value = 'Failed to load properties. Please try again later.';
+        error.value = $t('error_failed_properties');
         loading.value = false;
         console.error(err);
     }
@@ -32,33 +38,75 @@ const getCities = computed(() => {
     return [...uniqueCities].sort();
 });
 
+
 const getFilteredProperties = computed(() => {
-    return properties.value.filter(property => {
-        // Filter by city
-        if (filters.value.city && property.city !== filters.value.city) {
-            return false;
-        }
-
-        // Filter by price range
-        if (filters.value.priceRange) {
-            const [min, max] = filters.value.priceRange.split('-').map(Number);
-            if (min && property.price < min) return false;
-            if (max && property.price > max) return false;
-        }
-
-        // Filter by status
-        if (filters.value.status && property.status !== filters.value.status) {
-            return false;
-        }
-
-        return true;
-    });
+    return properties.value;
 });
 
-// Function to apply filters (can be expanded later)
-const applyFilters = () => {
-    console.log('Filters applied:', filters.value);
+
+const applyFilters = async (page = 1) => {
+    try {
+        loading.value = true;
+        currentPage.value = page;
+
+        const params = new URLSearchParams();
+        params.append('page', page);
+
+        if (filters.value.city) {
+            params.append('city', filters.value.city);
+        }
+        if (filters.value.status) {
+            params.append('status', filters.value.status);
+        }
+        if (filters.value.priceRange) {
+            const [min, max] = filters.value.priceRange.split('-').map(Number);
+            if (min) params.append('price_min', min);
+            if (max) params.append('price_max', max);
+        }
+
+        const response = await fetch(`/api/properties?${params.toString()}`);
+        const data = await response.json();
+
+        properties.value = data.data;
+        meta.value = data.meta;
+
+        loading.value = false;
+    } catch (err) {
+        error.value = $t('error_failed_filters');
+        loading.value = false;
+        console.error(err);
+    }
 };
+
+const goToPage = (page) => {
+    applyFilters(page);
+};
+
+const getPageNumbers = computed(() => {
+    if (!meta.value || !meta.value.last_page) return [];
+
+    const currentPageNum = meta.value.current_page;
+    const lastPage = meta.value.last_page;
+
+    let pages = [];
+
+    if (lastPage <= 5) {
+        for (let i = 1; i <= lastPage; i++) {
+            pages.push(i);
+        }
+    } else {
+        const startPage = Math.max(1, currentPageNum - 2);
+        const endPage = Math.min(lastPage, startPage + 4);
+        const adjustedStartPage = Math.max(1, endPage - 4);
+
+        for (let i = adjustedStartPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+    }
+
+    return pages;
+});
+
 
 export default {
     properties,
@@ -66,8 +114,11 @@ export default {
     error,
     filters,
     meta,
+    currentPage,
     fetchProperties,
     getCities,
     getFilteredProperties,
-    applyFilters
+    applyFilters,
+    goToPage,
+    getPageNumbers
 };
