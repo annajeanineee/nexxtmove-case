@@ -3,11 +3,21 @@ export default {
     navigation_statistics: 'Statistics',
     language_select: 'Change language',
     properties_title: 'Property Overview',
+    properties_total: 'Total results',
+    properties_baths: 'Beds',
+    properties_beds: 'Baths',
+    properties_balcony: 'Balcony',
+    properties_garden: 'Garden',
+    filters_all: 'All',
     filters_city: 'City',
     filters_price: 'Price range',
     filters_apply: 'Apply filters',
     details_view: 'View details',
     details_back: 'Back to overview',
     statistics_title: 'Statistics',
-    statistics_comingSoon: 'Coming soon'
+    statistics_comingSoon: 'Coming soon',
+    status_sold: 'Sold',
+    status_under_offer: 'Under offer',
+    status_available: 'Available',
+    status_rented: 'Rented'
 }

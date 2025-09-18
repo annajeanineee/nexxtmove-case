@@ -47,6 +47,7 @@
         padding: 20px;
         display: flex;
         flex-direction: column;
+        position: fixed;
     }
 
     .logo {

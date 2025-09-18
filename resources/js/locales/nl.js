@@ -3,11 +3,21 @@ export default {
     navigation_statistics: 'Statistieken',
     language_select: 'Taal wijzigen',
     properties_title: 'Woningoverzicht',
+    properties_total: 'Totaal resultaten',
+    properties_baths: 'Bedden',
+    properties_beds: 'Badk.',
+    properties_balcony: 'Balkon',
+    properties_garden: 'Tuin',
+    filters_all: 'Alles',
     filters_city: 'Plaats',
     filters_price: 'Prijsklasse',
     filters_apply: 'Filters toepassen',
     details_view: 'Details bekijken',
     details_back: 'Terug naar overzicht',
     statistics_title: 'Statistieken',
-    statistics_comingSoon: 'Binnenkort beschikbaar'
+    statistics_comingSoon: 'Binnenkort beschikbaar',
+    status_sold: 'Verkocht',
+    status_under_offer: 'Onder bieding',
+    status_available: 'Beschikbaar',
+    status_rented: 'Verhuurd'
 }
