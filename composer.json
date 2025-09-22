@@ -8,16 +8,21 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "spatie/laravel-query-builder": "^6.3",
+        "sqids/sqids": "^0.5.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.7",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.45",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "phpunit/phpunit": "^11.5.3",
+        "rector/rector": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -54,7 +59,15 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
-        ]
+        ],
+        "codestyle": [
+            "@pint",
+            "@refactor",
+            "@analyse"
+        ],
+        "pint": "@php vendor/bin/pint --config https://raw.githubusercontent.com/DIJ-digital/pint-config/main/pint.json",
+        "refactor": "rector",
+        "analyse": "@php vendor/bin/phpstan analyse --memory-limit=2G"
     },
     "extra": {
         "laravel": {

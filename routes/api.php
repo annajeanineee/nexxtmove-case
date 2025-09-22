@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Http\Controllers\Listing;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/properties', function () {
-    return response()->json([
-        'data' => [],
-        'meta' => ['total' => 0],
-    ]);
+Route::prefix('listings')->name('listings.')->group(callback: function (): void {
+    Route::get('/', Listing\Index::class)->name('index');
+    Route::get('/{listing}', Listing\Show::class)->name('show');
 });

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\City;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class CitySeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call([
-            CitySeeder::class,
-            ListingSeeder::class,
-        ]);
+        City::factory()->count(30)->create();
     }
 }
