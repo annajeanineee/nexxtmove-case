@@ -34,14 +34,16 @@
                     </ul>
                 </div>
             </div>
+            <PaginationControls />
         </div>
     </div>
-    </template>
+</template>
 
 <script setup>
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useListingsStore } from '../stores/listings.js'
+import PaginationControls from "./PaginationControls.vue";
 
 const listingsStore = useListingsStore()
 const { filteredListings, isLoading, error } = storeToRefs(listingsStore)

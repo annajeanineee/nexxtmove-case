@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property string $title
  * @property int $price
+ * @property int $city_id
  * @property City $city
  * @property Status $status
  * @property string $image
@@ -31,7 +32,7 @@ class Listing extends Model
         'price_currency',
         'description',
         'image',
-        'city',
+        'city_id',
         'status',
     ];
 

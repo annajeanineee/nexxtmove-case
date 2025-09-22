@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Listing;
 
+use App\Http\Resources\City\CityResource;
+use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @mixin Listing
+ */
 class IndexResource extends JsonResource
 {
     /**
@@ -23,7 +28,7 @@ class IndexResource extends JsonResource
             'description' => $this->resource->description,
             'status' => $this->resource->status,
             'image_path' => Storage::url($this->resource->image),
-            'city' => $this->whenLoaded('city'),
+            'city' => $this->whenLoaded('city', CityResource::make($this->resource->city)),
             'url' => route('listings.show', $this->resource),
         ];
     }

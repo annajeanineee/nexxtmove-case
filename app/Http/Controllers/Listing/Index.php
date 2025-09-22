@@ -8,7 +8,6 @@ use App\Http\Requests\Listing\IndexRequest;
 use App\Http\Resources\Listing\IndexResource;
 use App\Models\Listing;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Str;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,7 +16,12 @@ class Index
 {
     public function __invoke(IndexRequest $request): ResourceCollection
     {
-        $properties = QueryBuilder::for(Listing::class)
+        $validated = $request->validated();
+        $perPage = isset($validated['per_page']) && is_numeric($validated['per_page'])
+            ? (int) $validated['per_page']
+            : 12;
+
+        $builder = QueryBuilder::for(Listing::class)
             ->allowedFilters([
                 'status',
                 AllowedFilter::callback('city', static function ($query, $value): void {
@@ -46,8 +50,14 @@ class Index
                         ->select('listings.*');
                 }),
             ])
-            ->allowedIncludes('city')
-            ->get();
+            ->allowedIncludes('city');
+
+        $includes = (string) ($validated['include'] ?? '');
+        if ($includes !== '' && str_contains($includes, 'city')) {
+            $builder->with('city');
+        }
+
+        $properties = $builder->paginate($perPage)->withQueryString();
 
         return IndexResource::collection($properties);
     }

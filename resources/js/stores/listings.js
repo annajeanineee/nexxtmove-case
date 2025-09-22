@@ -8,6 +8,12 @@ export const useListingsStore = defineStore('listings', {
         useServerFiltering: true,
         _debounceHandle: null,
         sort: '',
+        pagination: {
+            page: 1,
+            perPage: 12,
+            total: 0,
+            lastPage: 1,
+        },
         filters: {
             city: '',
             status: '',
@@ -39,7 +45,7 @@ export const useListingsStore = defineStore('listings', {
     },
     actions: {
         buildApiParams() {
-            const params = { include: 'city', filter: {} }
+            const params = { include: 'city', filter: {}, page: this.pagination.page, per_page: this.pagination.perPage }
             if (this.filters.city) params.filter.city = this.filters.city
             if (this.filters.status) params.filter.status = this.filters.status
             const hasMin = this.filters.priceMin != null && this.filters.priceMin !== ''
@@ -51,6 +57,10 @@ export const useListingsStore = defineStore('listings', {
         },
         setSort(sortValue) {
             this.sort = sortValue || ''
+            return this.applyFiltersNow()
+        },
+        setPage(page) {
+            this.pagination.page = Math.max(1, Number(page) || 1)
             return this.applyFiltersNow()
         },
         applyFiltersNow() {
@@ -70,8 +80,18 @@ export const useListingsStore = defineStore('listings', {
             this.error = null
             try {
                 const response = await window.axios.get('/listings', { params })
-                // Laravel resource collections respond with { data: [...] }
-                this.listings = Array.isArray(response.data?.data) ? response.data.data : []
+                // Laravel pagination responds with { data: [...], meta: { current_page, last_page, total }, links: {...} }
+                if (Array.isArray(response.data?.data)) {
+                    this.listings = response.data.data
+                    const meta = response.data.meta || {}
+                    this.pagination.total = Number(meta.total || 0)
+                    this.pagination.lastPage = Number(meta.last_page || 1)
+                    this.pagination.page = Number(meta.current_page || 1)
+                } else {
+                    this.listings = []
+                    this.pagination.total = 0
+                    this.pagination.lastPage = 1
+                }
             } catch (e) {
                 this.error = 'Kon aanbod niet laden.'
                 // Optionally log for debugging
