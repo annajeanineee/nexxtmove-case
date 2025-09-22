@@ -47,6 +47,7 @@ class Index
                 AllowedSort::callback('city', static function ($query, bool $descending): void {
                     $query->leftJoin('cities', 'cities.id', '=', 'listings.city_id')
                         ->orderBy('cities.name', $descending ? 'desc' : 'asc')
+                        ->orderBy('listings.id', 'asc')
                         ->select('listings.*');
                 }),
             ])

@@ -38,6 +38,19 @@ class IndexTest extends FeatureTestCase
     }
 
     #[Test]
+    public function it_applies_default_pagination_when_missing(): void
+    {
+        Listing::factory()->count(20)->create();
+
+        $response = $this->getJson(route('listings.index'));
+
+        $response->assertOk()
+            ->assertJsonCount(12, 'data')
+            ->assertJsonPath('meta.per_page', 12)
+            ->assertJsonPath('meta.current_page', 1);
+    }
+
+    #[Test]
     public function it_can_include_city_relationship(): void
     {
         $city = City::factory()->create();
@@ -109,6 +122,16 @@ class IndexTest extends FeatureTestCase
     }
 
     #[Test]
+    public function it_returns_empty_when_price_min_greater_than_price_max(): void
+    {
+        Listing::factory()->create(['price' => 100000]);
+        Listing::factory()->create(['price' => 200000]);
+
+        $response = $this->getJson(route('listings.index', ['filter' => ['price_min' => 300000, 'price_max' => 100000]]));
+        $response->assertOk()->assertJsonCount(0, 'data');
+    }
+
+    #[Test]
     public function it_can_sort_by_price_ascending_and_descending(): void
     {
         Listing::factory()->create(['price' => 100000]);
@@ -138,5 +161,53 @@ class IndexTest extends FeatureTestCase
         // descending: Rotterdam first
         $response = $this->getJson(route('listings.index', ['sort' => '-city', 'include' => 'city', 'per_page' => 50]));
         $response->assertOk()->assertJsonPath('data.0.city.name', 'Rotterdam');
+    }
+
+    #[Test]
+    public function it_rejects_invalid_status_filter(): void
+    {
+        $response = $this->getJson(route('listings.index', ['filter' => ['status' => 'invalid']]));
+        $response->assertStatus(422);
+    }
+
+    #[Test]
+    public function it_rejects_invalid_pagination_params(): void
+    {
+        // per_page must be integer within bounds
+        $this->getJson(route('listings.index', ['per_page' => 'foo']))->assertStatus(422);
+        $this->getJson(route('listings.index', ['per_page' => 0]))->assertStatus(422);
+        $this->getJson(route('listings.index', ['per_page' => 101]))->assertStatus(422);
+
+        // page must be integer >= 1
+        $this->getJson(route('listings.index', ['page' => 'bar']))->assertStatus(422);
+        $this->getJson(route('listings.index', ['page' => 0]))->assertStatus(422);
+    }
+
+    #[Test]
+    public function it_returns_empty_for_out_of_range_page(): void
+    {
+        Listing::factory()->count(10)->create();
+
+        $response = $this->getJson(route('listings.index', ['per_page' => 5, 'page' => 999]));
+        $response->assertOk()
+            ->assertJsonCount(0, 'data');
+    }
+
+    #[Test]
+    public function index_resource_contains_image_path_and_url(): void
+    {
+        $listing = Listing::factory()->create(['image' => 'test-image.png']);
+
+        $response = $this->getJson(route('listings.index', ['per_page' => 50]));
+        $response->assertOk()
+            ->assertJson(fn ($json) => $json
+                ->whereType('data.0.image_path', 'string')
+                ->where('data.0.url', route('listings.show', $listing))
+                ->etc()
+            );
+
+        $imagePath = $response->json('data.0.image_path');
+        $this->assertIsString($imagePath);
+        $this->assertStringEndsWith('test-image.png', $imagePath);
     }
 }
