@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests\Listing;
 
 use App\Enums\Listing\Status;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
@@ -13,7 +12,7 @@ use Illuminate\Validation\Rule;
 class IndexRequest extends FormRequest
 {
     /**
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, mixed>
      */
     public function rules(): array
     {

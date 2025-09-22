@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Feature\Controllers\Listings;
 
-use App\Models\Listing;
 use App\Models\City;
+use App\Models\Listing;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\FeatureTestCase;
 

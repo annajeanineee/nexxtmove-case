@@ -16,7 +16,7 @@ class Index
 {
     public function __invoke(IndexRequest $request): ResourceCollection
     {
-        $validated = $request->validated();
+        $request->validated();
 
         $builder = QueryBuilder::for(Listing::class)
             ->allowedFilters([
