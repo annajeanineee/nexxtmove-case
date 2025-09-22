@@ -24,11 +24,11 @@ class ListingFactory extends Factory
             'price' => $this->faker->numberBetween(300000, 900000),
             'price_currency' => 'EUR',
             'description' => $this->faker->paragraph(),
-            'image' => 'listing-image-example.png',
+            'image' => 'listing-image-example-' . $this->faker->numberBetween(1, 6) . '.png',
             'city_id' => City::factory(),
             'status' => $this->faker->randomElement(Status::cases()),
             'street' => $this->faker->streetName(),
-            'house_number' => (string) $this->faker->numberBetween(1, 999),
+            'house_number' => $this->faker->numberBetween(1, 999),
             'house_number_addition' => $this->faker->boolean(30) ? $this->faker->randomLetter() : null,
             'postal_code' => strtoupper($this->faker->bothify('#### ??')),
         ];
@@ -37,7 +37,7 @@ class ListingFactory extends Factory
     public function city(City $city): self
     {
         return $this->state([
-            'city_id' => $city,
+            'city_id' => $city->id,
         ]);
     }
 }

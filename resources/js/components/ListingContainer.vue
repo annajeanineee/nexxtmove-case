@@ -53,7 +53,6 @@ onMounted(async () => {
         await listingsStore.fetchListings({ include: 'city' })
     }
     if (listingsStore.useServerFiltering) {
-        // Ensure server params reflect default filters
         listingsStore.applyFiltersNow()
     }
 })

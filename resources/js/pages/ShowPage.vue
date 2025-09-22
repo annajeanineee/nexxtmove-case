@@ -51,7 +51,7 @@
                         <div class="space-y-6 text-base text-gray-700" v-html="listing.description" />
                     </div>
 
-                    <!-- Additional sections can be added here when implemented -->
+                    
                 </div>
             </div>
         </div>

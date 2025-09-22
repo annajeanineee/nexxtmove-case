@@ -23,7 +23,7 @@ class ShowResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->id,
+            'id' => $this->resource->getRouteKey(),
             'title' => $this->resource->title,
             'price' => $this->resource->price,
             'price_currency' => $this->resource->price_currency,

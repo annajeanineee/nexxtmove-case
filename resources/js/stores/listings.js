@@ -80,7 +80,6 @@ export const useListingsStore = defineStore('listings', {
             this.error = null
             try {
                 const response = await window.axios.get('/listings', { params })
-                // Laravel pagination responds with { data: [...], meta: { current_page, last_page, total }, links: {...} }
                 if (Array.isArray(response.data?.data)) {
                     this.listings = response.data.data
                     const meta = response.data.meta || {}
@@ -94,8 +93,6 @@ export const useListingsStore = defineStore('listings', {
                 }
             } catch (e) {
                 this.error = 'Kon aanbod niet laden.'
-                // Optionally log for debugging
-                // console.error(e)
             } finally {
                 this.isLoading = false
             }

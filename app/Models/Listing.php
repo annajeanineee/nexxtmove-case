@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Listing extends Model
 {
-    /** @use HasFactory<ListingFactory> @ */
+    /** @use HasFactory<ListingFactory> */
     use HasFactory, HasHashids;
 
     protected $fillable = [

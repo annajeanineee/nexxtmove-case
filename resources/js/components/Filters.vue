@@ -98,8 +98,8 @@
                             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
                                 <PopoverPanel class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black/5 focus:outline-hidden">
                                     <div class="flex items-center gap-2">
-                                        <input v-model="filters.city" @input="onFilterChange()" type="text" placeholder="Zoek stad" class="block w-56 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
-                                        <button type="button" class="rounded-md bg-gray-100 px-2 py-1 text-xs" @click="clearCity()">Wissen</button>
+                                        <input v-model="filters.city" @input="onFilterChange()" type="text" placeholder="Zoek stad" class="block w-56 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2" />
+                                        <button type="button" class="rounded-md bg-gray-100 px-3 py-2 text-sm" @click="clearCity()">Wissen</button>
                                     </div>
                                 </PopoverPanel>
                             </transition>
@@ -148,10 +148,10 @@
                             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
                                 <PopoverPanel class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black/5 focus:outline-hidden">
                                     <div class="flex items-center gap-2">
-                                        <input v-model.number="filters.priceMin" @input="onFilterChange()" type="number" min="0" placeholder="Min" class="w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
+                                        <input v-model.number="filters.priceMin" @input="onFilterChange()" type="number" min="0" placeholder="Min" class="w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2" />
                                         <span class="text-gray-400">–</span>
-                                        <input v-model.number="filters.priceMax" @input="onFilterChange()" type="number" min="0" placeholder="Max" class="w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
-                                        <button type="button" class="rounded-md bg-gray-100 px-2 py-1 text-xs" @click="clearPrice()">Wissen</button>
+                                        <input v-model.number="filters.priceMax" @input="onFilterChange()" type="number" min="0" placeholder="Max" class="w-28 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm px-3 py-2" />
+                                        <button type="button" class="rounded-md bg-gray-100 px-3 py-2 text-sm" @click="clearPrice()">Wissen</button>
                                     </div>
                                 </PopoverPanel>
                             </transition>
@@ -210,7 +210,7 @@ function clearCity() {
 }
 
 function onFilterChange() {
-    // Debounce server-side filtering to avoid excessive requests while typing
+    listingsStore.pagination.page = 1
     listingsStore.applyFiltersDebounced(300)
 }
 
