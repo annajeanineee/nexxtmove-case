@@ -48,7 +48,8 @@ class Index
                         ->select('listings.*');
                 }),
             ])
-            ->allowedIncludes('city');
+            ->allowedIncludes('city')
+            ->with('city');
 
         $properties = $builder->paginate($request->getPerPage())->withQueryString();
 
