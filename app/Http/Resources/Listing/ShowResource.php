@@ -30,6 +30,7 @@ class ShowResource extends JsonResource
             'description' => $this->resource->description,
             'image_path' => Storage::url($this->resource->image),
             'status' => $this->resource->status,
+            'address' => $this->resource->address,
             'city' => $this->whenLoaded('city', CityResource::make($this->resource->city)),
         ];
     }

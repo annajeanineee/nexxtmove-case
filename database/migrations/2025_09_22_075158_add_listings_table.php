@@ -16,6 +16,10 @@ return new class() extends Migration
             $table->integer('price');
             $table->string('price_currency');
             $table->text('description');
+            $table->string('street');
+            $table->integer('house_number');
+            $table->string('house_number_addition')->nullable();
+            $table->string('postal_code');
             $table->string('status');
             $table->string('image');
             $table->timestamps();

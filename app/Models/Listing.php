@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\Listing\Status;
 use App\Models\Traits\HasHashids;
 use Database\Factories\ListingFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property City $city
  * @property Status $status
  * @property string $image
+ * @property string $street
+ * @property int $house_number
+ * @property ?string $house_number_addition
+ * @property string $postal_code
+ * @property-read string $address
  *
  * @method static ListingFactory factory()
  */
@@ -34,6 +40,10 @@ class Listing extends Model
         'image',
         'city_id',
         'status',
+        'street',
+        'house_number',
+        'house_number_addition',
+        'postal_code',
     ];
 
     protected $casts = [
@@ -46,5 +56,20 @@ class Listing extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
+    }
+
+    /**
+     * @return Attribute<string, never>
+     */
+    public function address(): Attribute
+    {
+        return Attribute::get(fn (): string => implode(', ', array_filter(
+                [
+                    trim($this->street . ' ' . $this->house_number . ($this->house_number_addition ?? '')),
+                    $this->postal_code,
+                    optional($this->city)->name,
+                ],
+                static fn ($part): bool => $part !== null && $part !== '')
+            ));
     }
 }

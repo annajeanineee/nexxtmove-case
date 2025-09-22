@@ -19,7 +19,7 @@
                                     {{ displayStatus(listing.status) }}
                                 </span>
                                 <img :src="listing.image_path" :alt="listing.title" class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75" />
-                                <div class="mt-6">
+                                <div class="mt-3">
                                     <p class="text-sm text-gray-500">{{ listing.city?.name ?? 'Onbekende stad' }}</p>
                                     <h3 class="mt-1 font-semibold text-gray-900">
                                         <router-link :to="{ name: 'listing.show', params: { id: listing.id } }">
@@ -74,7 +74,7 @@ function displayStatus(status) {
         case 'sold':
             return 'Verkocht'
         case 'pending':
-            return 'In optie'
+            return 'Onder optie'
         default:
             return status
     }

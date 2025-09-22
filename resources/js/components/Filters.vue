@@ -126,7 +126,7 @@
                                         </label>
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="radio" class="size-4" value="pending" v-model="filters.status" @change="onFilterChange()" />
-                                            <span>In optie</span>
+                                            <span>Onder optie</span>
                                         </label>
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="radio" class="size-4" value="sold" v-model="filters.status" @change="onFilterChange()" />

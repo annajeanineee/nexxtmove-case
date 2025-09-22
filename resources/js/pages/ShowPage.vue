@@ -42,7 +42,7 @@
                     <div class="mt-3">
                         <h2 class="sr-only">Prijs</h2>
                         <p class="text-3xl tracking-tight text-gray-900">{{ priceDisplay }}</p>
-                        <p class="text-sm text-gray-600 mt-1">{{ listing.city?.name ?? 'Onbekende stad' }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ listing.address || (listing.city?.name ?? 'Onbekende stad') }}</p>
                     </div>
 
                     <div class="mt-6">
@@ -108,7 +108,7 @@ function displayStatus(status) {
         case 'sold':
             return 'Verkocht'
         case 'pending':
-            return 'In optie'
+            return 'Onder optie'
         default:
             return status
     }
