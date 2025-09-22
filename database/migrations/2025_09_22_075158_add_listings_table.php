@@ -17,6 +17,7 @@ return new class() extends Migration
             $table->string('price_currency');
             $table->text('description');
             $table->string('status');
+            $table->string('image');
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@
 
     <section>
       <div class="card">
-        <p>API endpoint: <code>/api/properties</code> (nu dummy).</p>
+        <p>API endpoint: <code>/api/listings</code>. Front-end gebruikt Pinia om data op te halen.</p>
         <p>Minimaal: lijst + filters (plaats, prijsklasse) + detail.</p>
       </div>
     </section>

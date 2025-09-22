@@ -24,6 +24,7 @@ class ListingFactory extends Factory
             'price' => $this->faker->numberBetween(50000, 500000),
             'price_currency' => 'EUR',
             'description' => $this->faker->paragraph(),
+            'image' => 'listing-image-example.png',
             'city_id' => City::factory(),
             'status' => $this->faker->randomElement(Status::cases()),
         ];

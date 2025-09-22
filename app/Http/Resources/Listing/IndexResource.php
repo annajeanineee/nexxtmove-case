@@ -6,6 +6,7 @@ namespace App\Http\Resources\Listing;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class IndexResource extends JsonResource
 {
@@ -21,6 +22,7 @@ class IndexResource extends JsonResource
             'price_currency' => $this->resource->price_currency,
             'description' => $this->resource->description,
             'status' => $this->resource->status,
+            'image_path' => Storage::url($this->resource->image),
             'city' => $this->whenLoaded('city'),
             'url' => route('listings.show', $this->resource),
         ];

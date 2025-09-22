@@ -6,6 +6,7 @@ namespace App\Http\Resources\Listing;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ShowResource extends JsonResource
 {
@@ -20,6 +21,7 @@ class ShowResource extends JsonResource
             'price' => $this->resource->price,
             'price_currency' => $this->resource->price_currency,
             'description' => $this->resource->description,
+            'image_path' => Storage::url($this->resource->image),
             'status' => $this->resource->status,
             'city' => $this->whenLoaded('city'),
         ];

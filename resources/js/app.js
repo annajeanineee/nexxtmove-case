@@ -1,3 +1,9 @@
 import { createApp } from 'vue'
-import PropertiesPage from './pages/PropertiesPage.vue'
-createApp(PropertiesPage).mount('#app')
+import { createPinia } from 'pinia'
+import './bootstrap.js'
+import '../css/app.css'
+import IndexPage from "./pages/IndexPage.vue";
+
+const app = createApp(IndexPage)
+app.use(createPinia())
+app.mount('#app')
