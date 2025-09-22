@@ -17,9 +17,6 @@ class Index
     public function __invoke(IndexRequest $request): ResourceCollection
     {
         $validated = $request->validated();
-        $perPage = isset($validated['per_page']) && is_numeric($validated['per_page'])
-            ? (int) $validated['per_page']
-            : 12;
 
         $builder = QueryBuilder::for(Listing::class)
             ->allowedFilters([
@@ -53,12 +50,7 @@ class Index
             ])
             ->allowedIncludes('city');
 
-        $includes = (string) ($validated['include'] ?? '');
-        if ($includes !== '' && str_contains($includes, 'city')) {
-            $builder->with('city');
-        }
-
-        $properties = $builder->paginate($perPage)->withQueryString();
+        $properties = $builder->paginate($request->getPerPage())->withQueryString();
 
         return IndexResource::collection($properties);
     }
