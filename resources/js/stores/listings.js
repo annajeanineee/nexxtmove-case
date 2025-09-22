@@ -7,6 +7,7 @@ export const useListingsStore = defineStore('listings', {
         error: null,
         useServerFiltering: true,
         _debounceHandle: null,
+        sort: '',
         filters: {
             city: '',
             status: '',
@@ -45,7 +46,12 @@ export const useListingsStore = defineStore('listings', {
             const hasMax = this.filters.priceMax != null && this.filters.priceMax !== ''
             if (hasMin) params.filter.price_min = this.filters.priceMin
             if (hasMax) params.filter.price_max = this.filters.priceMax
+            if (this.sort) params.sort = this.sort
             return params
+        },
+        setSort(sortValue) {
+            this.sort = sortValue || ''
+            return this.applyFiltersNow()
         },
         applyFiltersNow() {
             const params = this.buildApiParams()

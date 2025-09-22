@@ -57,11 +57,27 @@
                 <h2 id="filter-heading" class="sr-only">Aanbod filters</h2>
                 <div class="flex items-center justify-between">
                     <Menu as="div" class="relative inline-block text-left">
+                        <MenuButton class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                            Sorteren
+                            <ChevronDownIcon class="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        </MenuButton>
+
                         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
                             <MenuItems class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-hidden">
                                 <div class="py-1">
-                                    <MenuItem v-for="option in sortOptions" :key="option" v-slot="{ active }">
-                                        <a :href="option.href" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm font-medium text-gray-900']">{{ option.name }}</a>
+                                    <MenuItem v-for="option in sortOptions" :key="option.value" v-slot="{ active }">
+                                        <button type="button" @click="onSort(option.value)" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block w-full px-4 py-2 text-left text-sm font-medium text-gray-900']">{{ option.name }}</button>
+                                    </MenuItem>
+                                </div>
+                            </MenuItems>
+                        </transition>
+                    </Menu>
+                    <Menu as="div" class="relative inline-block text-left">
+                        <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
+                            <MenuItems class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-hidden">
+                                <div class="py-1">
+                                    <MenuItem v-for="option in sortOptions" :key="option.value" v-slot="{ active }">
+                                        <button type="button" @click="onSort(option.value)" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block w-full px-4 py-2 text-left text-sm font-medium text-gray-900']">{{ option.name }}</button>
                                     </MenuItem>
                                 </div>
                             </MenuItems>
@@ -172,9 +188,10 @@ import { storeToRefs } from 'pinia'
 import { useListingsStore } from '../stores/listings.js'
 
 const sortOptions = [
-    { name: 'Most Popular', href: '#' },
-    { name: 'Best Rating', href: '#' },
-    { name: 'Newest', href: '#' },
+    { name: 'Prijs oplopend', value: 'price' },
+    { name: 'Prijs aflopend', value: '-price' },
+    { name: 'Stad A–Z', value: 'city' },
+    { name: 'Stad Z–A', value: '-city' },
 ]
 const listingsStore = useListingsStore()
 const { filters } = storeToRefs(listingsStore)
@@ -195,5 +212,9 @@ function clearCity() {
 function onFilterChange() {
     // Debounce server-side filtering to avoid excessive requests while typing
     listingsStore.applyFiltersDebounced(300)
+}
+
+function onSort(value) {
+    listingsStore.setSort(value)
 }
 </script>
