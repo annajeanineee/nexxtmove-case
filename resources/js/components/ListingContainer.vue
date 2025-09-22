@@ -13,16 +13,19 @@
             <div v-if="!isLoading && !error" class="relative mt-4">
                 <div class="relative -mb-6 w-full overflow-x-auto pb-6">
                     <ul role="list" class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0">
-                        <li v-for="listing in listings" :key="listing.id" class="inline-flex w-64 flex-col text-center lg:w-auto">
+                        <li v-for="listing in filteredListings" :key="listing.id" class="inline-flex w-64 flex-col text-center lg:w-auto pb-6">
                             <div class="group relative">
+                                <span class="absolute right-2 top-2 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium text-white" :class="statusClass(listing.status)">
+                                    {{ displayStatus(listing.status) }}
+                                </span>
                                 <img :src="listing.image_path" :alt="listing.title" class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75" />
                                 <div class="mt-6">
                                     <p class="text-sm text-gray-500">{{ listing.city?.name ?? 'Onbekende stad' }}</p>
                                     <h3 class="mt-1 font-semibold text-gray-900">
-                                        <a :href="listing.url">
+                                        <router-link :to="{ name: 'listing.show', params: { id: listing.id } }">
                                             <span class="absolute inset-0" />
                                             {{ listing.title }}
-                                        </a>
+                                        </router-link>
                                     </h3>
                                     <p class="mt-1 text-gray-900">{{ formatPrice(listing.price, listing.price_currency) }}</p>
                                 </div>
@@ -41,19 +44,50 @@ import { storeToRefs } from 'pinia'
 import { useListingsStore } from '../stores/listings.js'
 
 const listingsStore = useListingsStore()
-const { listings, isLoading, error } = storeToRefs(listingsStore)
+const { filteredListings, isLoading, error } = storeToRefs(listingsStore)
 
 onMounted(async () => {
-    if (listings.value.length === 0) {
+    if (listingsStore.listings.length === 0) {
         await listingsStore.fetchListings({ include: 'city' })
+    }
+    if (listingsStore.useServerFiltering) {
+        // Ensure server params reflect default filters
+        listingsStore.applyFiltersNow()
     }
 })
 
 function formatPrice(value, currency) {
     try {
-        return new Intl.NumberFormat('nl-NL', { style: 'currency', currency }).format(value)
+        return new Intl.NumberFormat('nl-NL', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value)
     } catch (e) {
         return `${value} ${currency}`
+    }
+}
+
+function displayStatus(status) {
+    if (!status) return 'Onbekend'
+    switch (status) {
+        case 'available':
+            return 'Beschikbaar'
+        case 'sold':
+            return 'Verkocht'
+        case 'pending':
+            return 'In optie'
+        default:
+            return status
+    }
+}
+
+function statusClass(status) {
+    switch (status) {
+        case 'available':
+            return 'bg-green-600'
+        case 'sold':
+            return 'bg-gray-700'
+        case 'pending':
+            return 'bg-yellow-600'
+        default:
+            return 'bg-slate-600'
     }
 }
 </script>

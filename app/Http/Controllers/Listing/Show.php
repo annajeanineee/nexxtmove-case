@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Listing;
 
-use App\Http\Controllers\Controller;
+use App\Helpers\Hashids;
 use App\Http\Resources\Listing\ShowResource;
 use App\Models\Listing;
+use Illuminate\Http\Request;
 
-class Show extends Controller
+class Show
 {
-    public function __invoke(Listing $listing): ShowResource
+    public function __invoke(Request $request, string $listingRouteKey): ShowResource
     {
+        $listing = Listing::with('city')
+            ->findOrFail(Hashids::decode($listingRouteKey));
+
         return ShowResource::make($listing);
     }
 }
